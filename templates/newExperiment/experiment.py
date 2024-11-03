@@ -143,7 +143,7 @@ def load_emoji(index, path="emojis.png"):
     emoji /= 255.0
     return emoji
 
-def visualize_batch(x0, x, output_dir):
+def visualize_batch(x0, x, out_dir):
     vis0 = to_rgb(x0)
     vis1 = to_rgb(x)
     fig, axs = plt.subplots(2, x0.shape[0], figsize=(15, 5))
@@ -154,14 +154,14 @@ def visualize_batch(x0, x, output_dir):
         axs[1, i].imshow(vis1[i])
         axs[1, i].axis('off')
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, f'batch_visualization.png'))
+    plt.savefig(os.path.join(out_dir, f'batch_visualization.png'))
     plt.close()
 
-def plot_loss(loss_log, output_dir):
+def plot_loss(loss_log, out_dir):
     plt.figure(figsize=(10, 4))
     plt.title('Loss history (log10)')
     plt.plot(np.log10(loss_log), '.', alpha=0.1)
-    plt.savefig(os.path.join(output_dir, 'loss_history.png'))
+    plt.savefig(os.path.join(out_dir, 'loss_history.png'))
     plt.close()
 
 def train(ca, x, target, steps, optimizer, scheduler):
@@ -178,8 +178,8 @@ def loss_f(x, target):
 
 def main(args):
     # Set up directories and device
-    output_dir = args.output_dir
-    os.makedirs(output_dir, exist_ok=True)
+    out_dir = args.out_dir
+    os.makedirs(out_dir, exist_ok=True)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # Load target emoji
@@ -230,8 +230,8 @@ def main(args):
 
         if step_i % 100 == 0:
             print(f"Step {step_i}, loss = {loss.item()}")
-            visualize_batch(x0.detach().cpu().numpy(), x.detach().cpu().numpy(), output_dir)
-            plot_loss(loss_log, output_dir)
+            visualize_batch(x0.detach().cpu().numpy(), x.detach().cpu().numpy(), out_dir)
+            plot_loss(loss_log, out_dir)
             torch.save(ca.state_dict(), args.model_path)
 
     final_metrics = {
@@ -254,7 +254,7 @@ def main(args):
         }
     }
 
-    with open(os.path.join(output_dir, "final_info.json"), "w") as f:
+    with open(os.path.join(out_dir, "final_info.json"), "w") as f:
         json.dump(results, f, indent=4)
 
 if __name__ == "__main__":
