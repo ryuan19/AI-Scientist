@@ -15,6 +15,7 @@ import torch.nn.functional as F
 
 #from utils.CAModel import CAModel
 #from utils.utils_vis import SamplePool, to_rgb, get_living_mask, make_seed, make_circle_masks
+
 #stuff from utils so scientist can edit it
 #utils vis
 class SamplePool:
@@ -238,7 +239,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=2e-3, help="Learning rate")
     parser.add_argument("--lr_gamma", type=float, default=0.9999, help="Learning rate decay")
     parser.add_argument("--betas", type=tuple, default=(0.5, 0.5), help="Optimizer betas")
-    parser.add_argument("--n_epoch", type=int, default=80000, help="Number of training epochs")
+    parser.add_argument("--n_epoch", type=int, default=2000, help="Number of training epochs")
     parser.add_argument("--batch_size", type=int, default=8, help="Batch size")
     parser.add_argument("--pool_size", type=int, default=1024, help="Pattern pool size")
     parser.add_argument("--cell_fire_rate", type=float, default=0.5, help="Cell fire rate")
