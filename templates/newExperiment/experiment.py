@@ -238,7 +238,7 @@ def main(args):
         "final_train_loss": loss_log[-1],
         "total_train_time": time.time() - start_time,
         "learning_rate_final": scheduler.get_last_lr()[0],
-        "training_epochs": args.n_epoch
+        "training_epochs": args.n_epoch,
     }
 
     # Store results in the desired JSON format
@@ -250,6 +250,7 @@ def main(args):
                 "training_epochs": final_metrics["training_epochs"]
             },
             "final_info_dict": final_metrics,
+            "losses": loss_log
         }
     }
 
