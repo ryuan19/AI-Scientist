@@ -202,8 +202,8 @@ def main(args):
     scheduler = optim.lr_scheduler.ExponentialLR(optimizer, args.lr_gamma)
     loss_log = []
 
-    #Have baseline metrics
-    metrics = []
+    #Have baseline metrics... compute the training time
+    start_time = time.time()
 
     for i in range(args.n_epoch + 1):
         if args.use_pattern_pool:
@@ -228,26 +228,33 @@ def main(args):
         step_i = len(loss_log)
         loss_log.append(loss.item())
 
-        metrics.append({
-            "epoch": i,
-            "loss": loss.item(),
-            "lr": scheduler.get_last_lr()[0]  # Log the current learning rate
-        })
-
-        # Save intermediate metrics every 1000 steps
-        if step_i % 1000 == 0:
-            with open(os.path.join(output_dir, "final_info.json"), "w") as f:
-                json.dump(metrics, f, indent=4)
-
         if step_i % 100 == 0:
             print(f"Step {step_i}, loss = {loss.item()}")
             visualize_batch(x0.detach().cpu().numpy(), x.detach().cpu().numpy(), output_dir)
             plot_loss(loss_log, output_dir)
             torch.save(ca.state_dict(), args.model_path)
 
-    # Save final metrics into final_info for launch scientist
+    final_metrics = {
+        "final_train_loss": loss_log[-1],
+        "total_train_time": time.time() - start_time,
+        "learning_rate_final": scheduler.get_last_lr()[0],
+        "training_epochs": args.n_epoch
+    }
+
+    # Store results in the desired JSON format
+    results = {
+        "experiment": {
+            "means": {
+                "final_train_loss_mean": final_metrics["final_train_loss"],
+                "total_train_time_mean": final_metrics["total_train_time"],
+                "training_epochs": final_metrics["training_epochs"]
+            },
+            "final_info_dict": final_metrics,
+        }
+    }
+
     with open(os.path.join(output_dir, "final_info.json"), "w") as f:
-        json.dump(metrics, f, indent=4)
+        json.dump(results, f, indent=4)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run CA Model Training")
