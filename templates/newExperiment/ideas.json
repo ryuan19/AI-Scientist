@@ -1,0 +1,26 @@
+[
+    {
+      "Name": "dynamic_cell_fire_rate",
+      "Title": "Dynamic Cell Fire Rate: Exploring Adaptive Cell Activation for Complex Pattern Formation",
+      "Experiment": "Experiment with a model that adjusts its cell fire rate dynamically based on local conditions, such as proximity to damaged areas or high-growth regions. Vary the fire rate to see how different levels impact growth and regeneration speed, pattern complexity, and stability over time. Analyze how this adaptive rate affects the CA’s ability to self-organize under different environmental conditions and whether it leads to emergent behaviors.",
+      "Interestingness": 8,
+      "Feasibility": 6,
+      "Novelty": 6
+    },
+    {
+      "Name": "genetic_algorithm_evolution",
+      "Title": "Emergent Complexity Through Evolutionary CA: Exploring Patterns via Genetic Algorithm Optimization",
+      "Experiment": "Use a genetic algorithm to evolve CA models over multiple generations, selecting for traits such as growth speed, stability, and regenerative efficiency. Observe the progression of patterns as generations pass, noting any emergent features or novel structural traits that arise. Track how various evolutionary pressures shape the CA’s behavior, exploring if certain configurations consistently lead to ‘lifelike’ or unexpected properties. This open-ended exploration aims to find unique patterns and adaptive capabilities through evolutionary selection.",
+      "Interestingness": 9,
+      "Feasibility": 4,
+      "Novelty": 8
+     },
+     {
+      "Name": "periodic_damage_recovery",
+      "Title": "Periodic Damage and Recovery Cycles: Investigating Resilience and Self-Healing in Cellular Automata",
+      "Experiment": "Introduce cycles of random damage at various intervals and intensities to see how different types of damage affect the CA’s ability to recover and maintain its structure over time. Experiment with different damage frequencies and observe how the CA adapts to repeated disturbances, noting if any new stable structures or unique recovery patterns emerge. The aim is to explore the CA’s self-healing properties and whether repeated stress leads to adaptive or self-organizing behaviors.",
+      "Interestingness": 9,
+      "Feasibility": 7,
+      "Novelty": 7
+     }
+  ]

@@ -6,7 +6,7 @@ import os
 import os.path as osp
 
 # LOAD FINAL RESULTS:
-datasets = ["shakespeare_char", "enwik8", "text8"]
+datasets = ["shakespeare_char"]
 folders = os.listdir("./")
 final_results = {}
 results_info = {}

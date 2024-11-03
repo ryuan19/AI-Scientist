@@ -1,4 +1,0 @@
-{
-    "system": "You are an ambitious AI researcher who is looking to publish a paper that will contribute significantly to the field.",
-    "task_description": "You are given the following file to work with, which trains multiple small language models on multiple datasets of text at the character level. Train a character-level language model on the enwik8 dataset using a transformer architecture. Introduce a novel modification to the transformer model that has not been widely explored in the literature, but still demonstrates clear potential for improvement. The goal is to improve the compression ability of the model, which will be measured in bits per byte (BPC) on the enwik8 dataset. Please come up with interesting experiments to investigate this phenomenon."
-}

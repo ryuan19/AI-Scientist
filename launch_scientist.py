@@ -30,12 +30,12 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Run AI scientist experiments")
     parser.add_argument(
         "--skip-idea-generation",
-        action="store_true",
+        action="store_false", #SKIPS IDEA GENERATION ON DEFAULT
         help="Skip idea generation and load existing ideas",
     )
     parser.add_argument(
         "--skip-novelty-check",
-        action="store_true",
+        action="store_false", #SKIPS NOVELTY CHECK ON DEFEAULT
         help="Skip novelty check and use existing ideas",
     )
     # add type of experiment (nanoGPT, Boston, etc.)
@@ -323,6 +323,7 @@ if __name__ == "__main__":
     novel_ideas = [idea for idea in ideas if idea["novel"]]
     # novel_ideas = list(reversed(novel_ideas))
 
+    print("FINISHED CHECKING NOVELTY, STARTING TO PROCESS IDEAS!!!")
     if args.parallel > 0:
         print(f"Running {args.parallel} parallel processes")
         queue = multiprocessing.Queue()
@@ -373,6 +374,9 @@ if __name__ == "__main__":
                     args.improvement,
                 )
                 print(f"Completed idea: {idea['Name']}, Success: {success}")
+                if success: #generate 1 paper and we are done
+                    print("Stopping early, 1 paper finished.")
+                    break
             except Exception as e:
                 print(f"Failed to evaluate idea {idea['Name']}: {str(e)}")
 
