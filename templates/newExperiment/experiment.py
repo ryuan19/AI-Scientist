@@ -202,6 +202,9 @@ def main(args):
     scheduler = optim.lr_scheduler.ExponentialLR(optimizer, args.lr_gamma)
     loss_log = []
 
+    #Have baseline metrics
+    metrics = []
+
     for i in range(args.n_epoch + 1):
         if args.use_pattern_pool:
             batch = pool.sample(args.batch_size)
@@ -225,11 +228,26 @@ def main(args):
         step_i = len(loss_log)
         loss_log.append(loss.item())
 
+        metrics.append({
+            "epoch": i,
+            "loss": loss.item(),
+            "lr": scheduler.get_last_lr()[0]  # Log the current learning rate
+        })
+
+        # Save intermediate metrics every 1000 steps
+        if step_i % 1000 == 0:
+            with open(os.path.join(output_dir, "final_info.json"), "w") as f:
+                json.dump(metrics, f, indent=4)
+
         if step_i % 100 == 0:
             print(f"Step {step_i}, loss = {loss.item()}")
             visualize_batch(x0.detach().cpu().numpy(), x.detach().cpu().numpy(), output_dir)
             plot_loss(loss_log, output_dir)
             torch.save(ca.state_dict(), args.model_path)
+
+    # Save final metrics into final_info for launch scientist
+    with open(os.path.join(output_dir, "final_info.json"), "w") as f:
+        json.dump(metrics, f, indent=4)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run CA Model Training")
@@ -250,5 +268,5 @@ if __name__ == "__main__":
     parser.add_argument("--model_path", type=str, default="mymodel.pth", help="Path to save/load model")
     parser.add_argument("--output_dir", type=str, default="output", help="Directory for output images and logs")
     args = parser.parse_args()
-
+    print(f"Running for {args.n_epoch} training epochs...")
     main(args)
