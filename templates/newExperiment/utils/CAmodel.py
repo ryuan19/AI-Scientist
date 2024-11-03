@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-
+#fixed
 class CAModel(nn.Module):
     def __init__(self, channel_n, fire_rate, device, hidden_size=128):
         super(CAModel, self).__init__()
