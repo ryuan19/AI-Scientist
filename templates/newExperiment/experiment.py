@@ -13,7 +13,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 
-from utils.CAModel import CAModel
+from utils.camodel import CAModel
 from utils.utils_vis import SamplePool, to_rgb, get_living_mask, make_seed, make_circle_masks
 
 def load_emoji(index, path="emojis.png"):
