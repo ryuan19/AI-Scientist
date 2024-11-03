@@ -302,6 +302,12 @@ if __name__ == "__main__":
 
     base_dir = osp.join("templates", args.experiment)
     results_dir = osp.join("results", args.experiment)
+    if args.skip_idea_generation:
+        print("Skipping idea generation...")
+
+    if args.skip_novelty_check:
+        print("Skipping novelty check...")
+
     ideas = generate_ideas(
         base_dir,
         client=client,
@@ -323,7 +329,7 @@ if __name__ == "__main__":
     novel_ideas = [idea for idea in ideas if idea["novel"]]
     # novel_ideas = list(reversed(novel_ideas))
 
-    print("FINISHED CHECKING NOVELTY, STARTING TO PROCESS IDEAS!!!")
+    print("FINISHED LOOKING INTO IDEAS, STARTING TO PROCESS IDEAS!!!")
     if args.parallel > 0:
         print(f"Running {args.parallel} parallel processes")
         queue = multiprocessing.Queue()
