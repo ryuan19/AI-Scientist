@@ -274,7 +274,7 @@ if __name__ == "__main__":
     parser.add_argument("--use_pattern_pool", type=int, default=1, help="Use pattern pool")
     parser.add_argument("--damage_n", type=int, default=3, help="Number of patterns to damage in a batch")
     parser.add_argument("--model_path", type=str, default="mymodel.pth", help="Path to save/load model")
-    parser.add_argument("--output_dir", type=str, default="output", help="Directory for output images and logs")
+    parser.add_argument("--out_dir", type=str, default="output", help="Directory for output images and logs")
     args = parser.parse_args()
     print(f"Running for {args.n_epoch} training epochs...")
     main(args)
