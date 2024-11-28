@@ -1,6 +1,8 @@
 
 #neural cellular automata, Growing-Neural-Cellular-Automata is original
 
+#handles plotting as well, keep plot.py empty and just change where writeup looks
+
 import argparse
 import json
 import os
@@ -108,16 +110,7 @@ class CAModel(nn.Module):
         y = torch.cat((x,y1,y2),1)
         return y
 
-    def adjust_fire_rate(self, x):
-        # Adjust fire rate based on a combination of proximity to damaged areas and high-growth regions
-        damage_proximity = 1.0 - get_living_mask(x).float()
-        growth_proximity = get_living_mask(x).float()
-        adjusted_fire_rate = self.fire_rate * (1 + damage_proximity + growth_proximity)
-        return adjusted_fire_rate
-
     def update(self, x, fire_rate, angle):
-        if fire_rate is None:
-            fire_rate = self.adjust_fire_rate(x)
         x = x.transpose(1,3)
         pre_life_mask = self.alive(x)
 
@@ -129,8 +122,8 @@ class CAModel(nn.Module):
 
         if fire_rate is None:
             fire_rate=self.fire_rate
-        stochastic = torch.rand([dx.size(0), dx.size(1), dx.size(2), 1], device=self.device) > fire_rate
-        stochastic = stochastic.float()
+        stochastic = torch.rand([dx.size(0),dx.size(1),dx.size(2),1])>fire_rate
+        stochastic = stochastic.float().to(self.device)
         dx = dx * stochastic
 
         x = x+dx.transpose(1,3)

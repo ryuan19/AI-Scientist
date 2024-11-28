@@ -42,7 +42,37 @@ If so, please modify the citation in template.tex to match the name in reference
     with open(writeup_file, "r") as f:
         tex_text = f.read()
     referenced_figs = re.findall(r"\\includegraphics.*?{(.*?)}", tex_text)
-    all_figs = [f for f in os.listdir(folder) if f.endswith(".png")]
+
+    """
+    want to look inside "run_folder" to plot those relevant ones
+    """
+    curr_subfolders = os.listdir(folder)
+    images_folder = folder
+    if "baseline" in curr_subfolders:
+        images_folder = os.path.join(folder, "baseline") #baseline folder
+        for myfn in os.listdir(images_folder): #add "_baseline" to end of every file to avoid duplication error
+            my_fp = os.path.join(images_folder, myfn)
+
+            # Check if it's a file (not a directory)
+            if os.path.isfile(my_fp):
+                # Split the file name into base name and extension
+                base_name, extension = os.path.splitext(myfn)
+                new_file_name = f"{base_name}_baseline{extension}"
+                new_file_path = os.path.join(images_folder, new_file_name)
+                os.rename(my_fp, new_file_path)
+
+        if "run_0" in curr_subfolders: #run 0 has visual results
+            run0folder = os.path.join(folder, "run_0")
+            for run0_item in os.listdir(run0folder):
+                item_source_path = os.path.join(run0folder, run0_item)
+                item_destination_path = os.path.join(images_folder, run0_item)
+
+                # check if is a file and copy it
+                if os.path.isfile(item_source_path):
+                    shutil.copy2(item_source_path, item_destination_path)
+
+    #now images folder should reference baseline folder, and contain images with baseline and run_0
+    all_figs = [f for f in os.listdir(images_folder) if f.endswith(".png")]
     for figure in referenced_figs:
         if figure not in all_figs:
             print(f"Figure {figure} not found in directory.")
@@ -131,7 +161,7 @@ per_section_tips = {
     "Abstract": """
 - TL;DR of the paper
 - What are we trying to do and why is it relevant?
-- Why is this hard? 
+- Why is this hard?
 - How do we solve it (i.e. our contribution!)
 - How do we verify that we solved it (e.g. Experiments and results)
 
@@ -140,20 +170,20 @@ Please make sure the abstract reads smoothly and is well-motivated. This should 
     "Introduction": """
 - Longer version of the Abstract, i.e. of the entire paper
 - What are we trying to do and why is it relevant?
-- Why is this hard? 
+- Why is this hard?
 - How do we solve it (i.e. our contribution!)
 - How do we verify that we solved it (e.g. Experiments and results)
 - New trend: specifically list your contributions as bullet points
 - Extra space? Future work!
 """,
     "Related Work": """
-- Academic siblings of our work, i.e. alternative attempts in literature at trying to solve the same problem. 
-- Goal is to “Compare and contrast” - how does their approach differ in either assumptions or method? If their method is applicable to our Problem Setting I expect a comparison in the experimental section. If not, there needs to be a clear statement why a given method is not applicable. 
+- Academic siblings of our work, i.e. alternative attempts in literature at trying to solve the same problem.
+- Goal is to “Compare and contrast” - how does their approach differ in either assumptions or method? If their method is applicable to our Problem Setting I expect a comparison in the experimental section. If not, there needs to be a clear statement why a given method is not applicable.
 - Note: Just describing what another paper is doing is not enough. We need to compare and contrast.
 """,
     "Background": """
-- Academic Ancestors of our work, i.e. all concepts and prior work that are required for understanding our method. 
-- Usually includes a subsection, Problem Setting, which formally introduces the problem setting and notation (Formalism) for our method. Highlights any specific assumptions that are made that are unusual. 
+- Academic Ancestors of our work, i.e. all concepts and prior work that are required for understanding our method.
+- Usually includes a subsection, Problem Setting, which formally introduces the problem setting and notation (Formalism) for our method. Highlights any specific assumptions that are made that are unusual.
 - Note: If our paper introduces a novel problem setting as part of its contributions, it's best to have a separate Section.
 """,
     "Method": """
@@ -168,7 +198,7 @@ Please make sure the abstract reads smoothly and is well-motivated. This should 
 - Shows the results of running Method on our problem described in Experimental Setup.
 - Includes statements on hyperparameters and other potential issues of fairness.
 - Only includes results that have actually been run and saved in the logs. Do not hallucinate results that don't exist.
-- If results exist: compares to baselines and includes statistics and confidence intervals. 
+- If results exist: compares to baselines and includes statistics and confidence intervals.
 - If results exist: includes ablation studies to show that specific parts of the method are relevant.
 - Discusses limitations of the method.
 - Make sure to include all the results from the experiments, and include all relevant figures.
